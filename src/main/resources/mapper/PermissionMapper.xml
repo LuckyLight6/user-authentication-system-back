@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.luckylight.mapper.PermissionMapper">
+    <resultMap id="BaseResultMap" type="club.luckylight.model.Permission">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="permission_id" jdbcType="INTEGER" property="permissionId"/>
+        <result column="permission_name" jdbcType="VARCHAR" property="permissionName"/>
+        <result column="permission_ip" jdbcType="VARCHAR" property="permissionIp"/>
+        <result column="permission_port" jdbcType="INTEGER" property="permissionPort"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="flow_id" jdbcType="INTEGER" property="flowId"/>
+        <result column="flow_body" jdbcType="VARCHAR" property="flowBody"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+</mapper>

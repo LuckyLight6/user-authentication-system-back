@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.luckylight.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="club.luckylight.model.User">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+    </resultMap>
+</mapper>
