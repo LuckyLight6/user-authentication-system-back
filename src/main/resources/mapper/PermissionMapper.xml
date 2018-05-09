@@ -16,4 +16,15 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
+
+    <resultMap id="UseablePermission" type="club.luckylight.dto.UseablePermissionDto">
+        <result column="permission_name" jdbcType="VARCHAR" property="permissionName"/>
+        <result column="permission_ip" jdbcType="VARCHAR" property="permissionIp"/>
+        <result column="permission_port" jdbcType="INTEGER" property="permissionPort"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <select id="getRolePermissionByRoleId" resultMap="UseablePermission">
+        SELECT p.permission_name, p.permission_ip, p.permission_port, p.remark from role_permission rp LEFT JOIN permission p ON rp.permission_id = p.permission_id WHERE rp.role_id = #{roleId} AND p.status = 1
+    </select>
 </mapper>
