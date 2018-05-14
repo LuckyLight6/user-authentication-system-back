@@ -4,12 +4,15 @@ import club.luckylight.dto.UseablePermissionDto;
 import club.luckylight.mapper.FlowMapper;
 import club.luckylight.mapper.PermissionMapper;
 import club.luckylight.mapper.UserMapper;
+import club.luckylight.mapper.UserPermissionMapper;
 import club.luckylight.model.User;
+import club.luckylight.model.UserPermission;
 import club.luckylight.model.flow.*;
 import club.luckylight.service.AuthService;
 import club.luckylight.util.ODLUtils;
 import club.luckylight.vo.auth.LoginRequestVo;
 import club.luckylight.vo.flow.AddFlowRequestVo;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,6 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -34,6 +36,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private FlowMapper flowMapper;
+
+    @Autowired
+    private UserPermissionMapper userPermissionMapper;
 
     @Override
     public User login(LoginRequestVo vo) {
@@ -64,7 +69,23 @@ public class AuthServiceImpl implements AuthService {
         List<UseablePermissionDto> useablePermissionList = permissionMapper.getRolePermissionByRoleId(user.getRoleId());
 
         for (UseablePermissionDto useablePermissionDto : useablePermissionList) {
-            int flowId = getFlowId();
+            int flowId;
+
+            Example example = new Example(UserPermission.class);
+            example.createCriteria().andEqualTo("userId", user.getId()).andEqualTo("permissionId", useablePermissionDto.getPermissionId());
+            List<UserPermission> userPermissions = userPermissionMapper.selectByExample(example);
+
+            if (CollectionUtil.isNotEmpty(userPermissions)) {
+                flowId = userPermissions.get(0).getFlowId();
+            } else {
+                flowId = getFlowId();
+
+                UserPermission userPermission = new UserPermission();
+                userPermission.setUserId(user.getId());
+                userPermission.setPermissionId(useablePermissionDto.getPermissionId());
+                userPermission.setFlowId(flowId);
+                userPermissionMapper.insert(userPermission);
+            }
 
             EthernetType ethernetType = new EthernetType();
             ethernetType.setType("2048");
@@ -118,7 +139,23 @@ public class AuthServiceImpl implements AuthService {
         List<UseablePermissionDto> useablePermissionList = permissionMapper.getRolePermissionByRoleId(user.getRoleId());
 
         for (UseablePermissionDto useablePermissionDto : useablePermissionList) {
-            int flowId = getFlowId();
+            int flowId;
+
+            Example example = new Example(UserPermission.class);
+            example.createCriteria().andEqualTo("userId", user.getId()).andEqualTo("permissionId", useablePermissionDto.getPermissionId());
+            List<UserPermission> userPermissions = userPermissionMapper.selectByExample(example);
+
+            if (CollectionUtil.isNotEmpty(userPermissions)) {
+                flowId = userPermissions.get(0).getFlowId();
+            } else {
+                flowId = getFlowId();
+
+                UserPermission userPermission = new UserPermission();
+                userPermission.setUserId(user.getId());
+                userPermission.setPermissionId(useablePermissionDto.getPermissionId());
+                userPermission.setFlowId(flowId);
+                userPermissionMapper.insert(userPermission);
+            }
 
             EthernetType ethernetType = new EthernetType();
             ethernetType.setType("2048");

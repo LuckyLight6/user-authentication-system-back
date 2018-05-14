@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.luckylight.mapper.UserPermissionMapper">
+    <resultMap id="BaseResultMap" type="club.luckylight.model.UserPermission">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="permission_id" jdbcType="INTEGER" property="permissionId"/>
+        <result column="flow_id" jdbcType="INTEGER" property="flowId"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="club.luckylight.model.Flow" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_permission (user_id, permission_id, flow_id) VALUES (#{userId}, #{permissionId}, #{flowId})
+    </insert>
+</mapper>
