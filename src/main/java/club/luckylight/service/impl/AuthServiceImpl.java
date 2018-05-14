@@ -1,6 +1,7 @@
 package club.luckylight.service.impl;
 
 import club.luckylight.dto.UseablePermissionDto;
+import club.luckylight.mapper.FlowMapper;
 import club.luckylight.mapper.PermissionMapper;
 import club.luckylight.mapper.UserMapper;
 import club.luckylight.model.User;
@@ -17,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,17 +26,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class AuthServiceImpl implements AuthService {
 
-    private final UserMapper userMapper;
-
-    private final PermissionMapper permissionMapper;
-
-    private AtomicInteger atomicFlowId = new AtomicInteger(10000);
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
-    public AuthServiceImpl(UserMapper userMapper, PermissionMapper permissionMapper) {
-        this.userMapper = userMapper;
-        this.permissionMapper = permissionMapper;
-    }
+    private PermissionMapper permissionMapper;
+
+    @Autowired
+    private FlowMapper flowMapper;
 
     @Override
     public User login(LoginRequestVo vo) {
@@ -65,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
         List<UseablePermissionDto> useablePermissionList = permissionMapper.getRolePermissionByRoleId(user.getRoleId());
 
         for (UseablePermissionDto useablePermissionDto : useablePermissionList) {
-            int flowId = atomicFlowId.getAndAdd(1);
+            int flowId = getFlowId();
 
             EthernetType ethernetType = new EthernetType();
             ethernetType.setType("2048");
@@ -79,10 +78,11 @@ public class AuthServiceImpl implements AuthService {
             match.setIpv4Destination(useablePermissionDto.getPermissionIp() + "/32");
 
             if (ObjectUtil.isNull(useablePermissionDto.getPermissionPort())) {
+                match.setTcpDestinationPort(useablePermissionDto.getPermissionPort().toString());
+
                 IpMatch ipMatch = new IpMatch();
                 ipMatch.setIpProtocol("6");
                 match.setIpMatch(ipMatch);
-                match.setTcpDestinationPort(useablePermissionDto.getPermissionPort().toString());
             }
 
             ApplyActions applyActions = new ApplyActions();
@@ -118,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
         List<UseablePermissionDto> useablePermissionList = permissionMapper.getRolePermissionByRoleId(user.getRoleId());
 
         for (UseablePermissionDto useablePermissionDto : useablePermissionList) {
-            int flowId = atomicFlowId.getAndAdd(1);
+            int flowId = getFlowId();
 
             EthernetType ethernetType = new EthernetType();
             ethernetType.setType("2048");
@@ -169,5 +169,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<UseablePermissionDto> getUserPermission(User user) {
         return permissionMapper.getRolePermissionByRoleId(user.getRoleId());
+    }
+
+    private int getFlowId() {
+        club.luckylight.model.Flow flow = new club.luckylight.model.Flow();
+        flow.setCreateTime(new Date());
+        flow.setUpdateTime(new Date());
+        flowMapper.insert(flow);
+
+        return flow.getId();
     }
 }
