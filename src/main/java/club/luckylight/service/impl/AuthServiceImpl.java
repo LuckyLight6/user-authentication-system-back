@@ -87,6 +87,8 @@ public class AuthServiceImpl implements AuthService {
                 userPermissionMapper.insert(userPermission);
             }
 
+            ODLUtils.deleteFlow("60.205.190.37", "8181", "1", flowId);
+
             EthernetType ethernetType = new EthernetType();
             ethernetType.setType("2048");
 
@@ -157,6 +159,8 @@ public class AuthServiceImpl implements AuthService {
                 userPermissionMapper.insert(userPermission);
             }
 
+            ODLUtils.deleteFlow("60.205.190.37", "8181", "1", flowId);
+
             EthernetType ethernetType = new EthernetType();
             ethernetType.setType("2048");
 
@@ -188,7 +192,7 @@ public class AuthServiceImpl implements AuthService {
             flow.setFlowId(String.valueOf(flowId));
             flow.setIdleTimeout(0L);
             flow.setHardTimeout(0L);
-            flow.setPriority("300");
+            flow.setPriority("200");
             flow.setTableId("0");
             flow.setMatch(match);
             flow.setInstructions(instructions);
