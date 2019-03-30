@@ -60,7 +60,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>4.0.10</version>
+            <version>RELEASE</version>
         </dependency>
 
         <dependency>
